@@ -1,3 +1,7 @@
+読書メモをdiscordから追加できるdiscord botです
+
+別でDBサーバを立てることで、このbot経由でdiscordからメモを編集・追加することができます
+
 My Discord Bot
 ===============
 
