@@ -1,0 +1,42 @@
+# Discord Bot用のsystemdサービス設定例
+# /etc/systemd/system/discord-bot.service として保存して使用してください
+# ※必要に応じてパスやユーザー名を環境に合わせて変更してください
+
+[Unit]
+Description=Discord Reading Memo Bot
+After=network.target
+
+[Service]
+# 実行するユーザー（必要に応じて変更）
+User=reindeer
+
+# 作業ディレクトリ
+WorkingDirectory=/home/reindeer/my-discord-bot
+
+# 実行コマンド - 仮想環境のPythonを使用
+ExecStart=/home/reindeer/my-discord-bot/.venv/bin/python /home/reindeer/my-discord-bot/bot.py
+
+# プロセス停止方法の指定
+KillMode=process
+KillSignal=SIGINT
+
+# 自動再起動の設定
+Restart=on-failure
+RestartSec=5
+
+# 環境変数の設定方法（以下の2つの方法から選択）
+
+# 方法1: .envファイルを使用（推奨）
+# /etc/default/discord-bot を作成し、環境変数を定義します
+# ※ファイル内では DISCORD_BOT_TOKEN="token" のように記述します
+EnvironmentFile=/etc/default/discord-bot
+
+# 方法2: 直接環境変数を指定（テスト用・非推奨）
+# Environment=DISCORD_BOT_TOKEN=your_token_here
+# Environment=DB_USER=memo_user
+# Environment=DB_PASSWORD=password
+# Environment=DB_HOST=localhost
+# Environment=DB_DATABASE=reading_memos_db
+
+[Install]
+WantedBy=multi-user.target

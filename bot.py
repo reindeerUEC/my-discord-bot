@@ -70,6 +70,12 @@ client = discord.Client(intents=intents)
 # データベース接続を管理する関数
 def get_db_connection():
     try:
+        # デバッグ用: 接続設定を表示
+        print("DB接続設定:")
+        print(f"  user: {DB_CONFIG.get('user')}")
+        print(f"  host: {DB_CONFIG.get('host')}")
+        print(f"  database: {DB_CONFIG.get('database')}")
+        
         conn = mysql.connector.connect(**DB_CONFIG)
         return conn
     except mysql.connector.Error as err:
@@ -119,6 +125,7 @@ async def on_message(message):
                     "!addmemo <書籍ID> <メモ> - 読書メモを登録\n"
                     "!books             - 登録済みの本を一覧表示\n"
                     "!memos <書籍ID>    - 特定の本のメモを一覧表示\n"
+                    "!ping              - 動作確認用コマンド\n"
                     "```"
                 )
                 await message.channel.send(help_text)
@@ -180,7 +187,9 @@ async def on_message(message):
                                 response += f"- {memo[0]} ({memo[1].strftime('%Y-%m-%d')})\n"
                             response += "```"
                         await message.channel.send(response)
-            elif command == 'ping':
+
+            # --- !ping: 動作確認用コマンド ---
+            elif command == '!ping':
                 await message.channel.send('pong')
 
         except mysql.connector.Error as err:
